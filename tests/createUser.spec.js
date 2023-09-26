@@ -1,19 +1,15 @@
-// @ts-check
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
 
-test('has title', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
+const { commonMethods } = require('./keywords/commonPageKeywords');
+const { createAsingleUser } = require('./keywords/createUser');
 
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Playwright/);
-});
+test('createASingleUser', async ({ page }) => {
 
-test('get started link', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
+    const commonMethod = new commonMethods(page);
+    const create = new createAsingleUser(page);
 
-  // Click the get started link.
-  await page.getByRole('link', { name: 'Get started' }).click();
-
-  // Expects page to have a heading with the name of Installation.
-  await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
-});
+    await commonMethod.openSignInFlow();
+    await create.createUser();
+    
+    await expect(page).toHaveURL("http://www.automationpractice.pl/index.php?controller=my-account");
+})
